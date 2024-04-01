@@ -8,7 +8,7 @@ public record CustomerService(CusomerRepository repository) {
         Customer customer = Customer.builder()
                 .name(registerRequest.name())
                 .family(registerRequest.family())
-                .address(registerRequest.email())
+                .email(registerRequest.email())
                 .build();
         repository.save(customer);
     }
