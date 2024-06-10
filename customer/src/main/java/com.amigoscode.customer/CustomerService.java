@@ -6,7 +6,6 @@ import com.amigoscode.client.notification.NotificationDTO;
 import com.amigoscode.client.notification.NotificatonClient;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,13 +31,13 @@ public class CustomerService {
         FraudRespDto fraudRespDto = fraudClient.checkFraudster(Long.valueOf(customer.getId()));
         if (fraudRespDto.isFraudster())
             throw new IllegalStateException("Fraudster!!!");
-
-//        notificatonClient.receiveNotification(NotificationDTO.builder()
-//                        .customerId(Long.valueOf(customer.getId()))
-//                        .toCustomerEmail("example@gmail.com")
-//                        .message("example message")
-//                        .sender("Admin")
-//                        .build());
+//TODO: fix load balance error*******
+        notificatonClient.receiveNotification(NotificationDTO.builder()
+                .customerId(Long.valueOf(customer.getId()))
+                .toCustomerEmail("example@gmail.com")
+                .message("example message")
+                .sender("Admin")
+                .build());
     }
 
     public List<CustomerRegisterResp> fetchCustomerByFamily(String family) {
