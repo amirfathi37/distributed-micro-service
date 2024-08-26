@@ -1,5 +1,6 @@
 package com.amigoscode.customer;
 
+import com.amigoscode.amqp.RabbitMQMessageProducer;
 import com.amigoscode.client.fraud.FraudClient;
 import com.amigoscode.client.fraud.FraudRespDto;
 import com.amigoscode.client.notification.NotificationDTO;
@@ -15,7 +16,7 @@ import java.util.List;
 public class CustomerService {
     private final CusomerRepository repository;
     private final FraudClient fraudClient;
-    private final NotificatonClient notificatonClient;
+    private final RabbitMQMessageProducer rabbitMQMessageProducer;
 
 
     public void register(CustomerRegisterRequest registerRequest) {
@@ -31,13 +32,22 @@ public class CustomerService {
         FraudRespDto fraudRespDto = fraudClient.checkFraudster(Long.valueOf(customer.getId()));
         if (fraudRespDto.isFraudster())
             throw new IllegalStateException("Fraudster!!!");
-//TODO: fix load balance error*******
-        notificatonClient.receiveNotification(NotificationDTO.builder()
+////TODO: fix load balance error*******
+//        notificatonClient.receiveNotification(NotificationDTO.builder()
+//                .customerId(Long.valueOf(customer.getId()))
+//                .toCustomerEmail("example@gmail.com")
+//                .message("example message")
+//                .sender("Admin")
+//                .build());
+        NotificationDTO notificationDTO = NotificationDTO.builder()
                 .customerId(Long.valueOf(customer.getId()))
                 .toCustomerEmail("example@gmail.com")
                 .message("example message")
                 .sender("Admin")
-                .build());
+                .build();
+        rabbitMQMessageProducer.publish(notificationDTO,
+                "internal.exchange",
+                "internal.notification.routing-key");
     }
 
     public List<CustomerRegisterResp> fetchCustomerByFamily(String family) {
