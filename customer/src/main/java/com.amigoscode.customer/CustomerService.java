@@ -4,7 +4,6 @@ import com.amigoscode.amqp.RabbitMQMessageProducer;
 import com.amigoscode.client.fraud.FraudClient;
 import com.amigoscode.client.fraud.FraudRespDto;
 import com.amigoscode.client.notification.NotificationDTO;
-import com.amigoscode.client.notification.NotificatonClient;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -41,9 +40,9 @@ public class CustomerService {
 //                .build());
         NotificationDTO notificationDTO = NotificationDTO.builder()
                 .customerId(Long.valueOf(customer.getId()))
-                .toCustomerEmail("example@gmail.com")
-                .message("example message")
-                .sender("Admin")
+                .toCustomerEmail(customer.getEmail())
+                .message("Dear " + customer.getName() + "wellcome to my project")
+                .sender("RabbitMQ")
                 .build();
         rabbitMQMessageProducer.publish(notificationDTO,
                 "internal.exchange",
