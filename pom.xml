@@ -30,6 +30,7 @@
         <spring.boot.starter.test.version>2.5.7</spring.boot.starter.test.version>
         <spring.boot.starter.plugin.version>2.5.7</spring.boot.starter.plugin.version>
         <spring.cloud-version>2020.0.3</spring.cloud-version>
+        <image>amirfathy/${project.artifactId}:${project.version}</image>
     </properties>
 
     <dependencyManagement>
@@ -78,6 +79,31 @@
                         <execution>
                             <goals>
                                 <goal>repackage</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>com.google.cloud.tools</groupId>
+                    <artifactId>jib-maven-plugin</artifactId>
+                    <version>3.1.4</version>
+                    <configuration>
+                        <from>
+                            <image>eclipse-temurin:17</image><!--it is a new Opern JDK-->
+                        </from>
+                        <to>
+                            <tags>
+                                <tag>latest</tag><!--tage for our image-->
+                            </tags>
+                        </to>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <phase>package</phase><!--run this plugin after package phase-->
+                            <goals>
+                                <goal>
+                                    build<!--build goal build an image and push it to Registry (my docker hub)-->
+                                </goal>
                             </goals>
                         </execution>
                     </executions>
