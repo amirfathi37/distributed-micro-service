@@ -78,7 +78,7 @@
                     <executions>
                         <execution>
                             <goals>
-                                <goal>repackage</goal>
+                                <goal>repackage</goal><!--make our jar/war axecutable -->
                             </goals>
                         </execution>
                     </executions>
@@ -89,11 +89,11 @@
                     <version>3.1.4</version>
                     <configuration>
                         <from>
-                            <image>eclipse-temurin:17</image><!--it is a new Opern JDK-->
+                            <image>eclipse-temurin:17</image><!--it is a new Open JDK-->
                         </from>
                         <to>
                             <tags>
-                                <tag>latest</tag><!--tage for our image-->
+                                <tag>latest</tag><!--tag for our image-->
                             </tags>
                         </to>
                     </configuration>
